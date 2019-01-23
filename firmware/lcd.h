@@ -7,10 +7,10 @@
 
 
 
-#define LCD_Dir DDRA					/* Define LCD data port direction */
-#define LCD_Port PORTA					/* Define LCD data port */
-#define RS PA1							/* Define Register Select (data reg./command reg.) signal pin */
-#define EN PA3 							/* Define Enable signal pin */
+#define LCD_Dir DDRB					/* Define LCD data port direction */
+#define LCD_Port PORTB					/* Define LCD data port */
+#define RS PB1							/* Define Register Select (data reg./command reg.) signal pin */
+#define EN PB3 							/* Define Enable signal pin */
  
 
 void LCD_Command( unsigned char cmnd )

@@ -23,7 +23,7 @@ void init() {
 	DDRC = 0x00;
 	PORTC = 0x00;
 
-	DDRD = 0x00;
+	DDRD = (1<<PD1); // TXD Usart Output
 	PORTD = 0x00;
 
 
@@ -35,8 +35,8 @@ int main() {
 	lcd_init();
 	usart_init();
 	adc_init();
-	timer0_init();
-
+	timer_init();
+	sei();
 	while(1) {
 	
 

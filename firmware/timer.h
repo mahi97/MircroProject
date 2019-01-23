@@ -5,7 +5,7 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-void timer0_init() {
+void timer_init() {
 
 }
 
