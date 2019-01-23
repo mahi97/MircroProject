@@ -5,6 +5,11 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
+ISR(ADC_vect)
+{ 
+	ADCSRA |= 1<<ADSC; // Start Conversion
+	// TODO : SHOW Battery level on PORTC
+}
 
 void adc_init() {
 	ADCSRA = (1 << ADEN)  // Enable the ADC

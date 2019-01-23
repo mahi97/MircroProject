@@ -17,15 +17,15 @@ void init() {
 	DDRA = 0x00;
 	PORTA = 0x00;
 
-	DDRB = 0x00;
+	DDRB = 0xFF;
 	PORTB = 0x00;
 
-	DDRC = 0x00;
+	DDRC = 0xFF;
 	PORTC = 0x00;
 
-	DDRD = (1<<PD1); // TXD Usart Output
+	DDRD = (1<<PD1)  // TXD Usart Output
+	     | (1<<PD7); // OC2 TIMER OUTPUT
 	PORTD = 0x00;
-
 
 }
 
