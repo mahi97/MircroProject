@@ -1,1 +1,7 @@
 objs/*
+.qmake.stash
+*.user
+MICRO
+MICRO.app/*
+MICRO.exe
+Makefile
