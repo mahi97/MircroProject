@@ -17,10 +17,10 @@ void init() {
 	DDRA = 0x00;
 	PORTA = 0x00;
 
-	DDRB = 0xFF;
+	DDRB = 0xFF; // LCD
 	PORTB = 0x00;
 
-	DDRC = 0xFF;
+	DDRC = 0xFF; // LEDs
 	PORTC = 0x00;
 
 	DDRD = (1<<PD1)  // TXD Usart Output

@@ -8,6 +8,9 @@
 ISR(ADC_vect)
 { 
 	ADCSRA |= 1<<ADSC; // Start Conversion
+	while(ADCSRA & (1<<ADSC));
+	uint16_t i = ADC;
+	
 	// TODO : SHOW Battery level on PORTC
 }
 
