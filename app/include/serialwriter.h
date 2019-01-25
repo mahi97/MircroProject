@@ -12,7 +12,7 @@ public:
     virtual ~SerialWriter();
 
     void write(const QByteArray &writeData);
-
+    void reset(QSerialPort* serialPort);
 private slots:
     void handleBytesWritten(qint64 bytes);
     virtual void handleTimeout();

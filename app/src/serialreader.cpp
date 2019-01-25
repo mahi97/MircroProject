@@ -4,7 +4,7 @@ SerialReader::SerialReader(QSerialPort *serialPort, QObject *parent)
     : BaseSerial(serialPort, parent)
 {
     connect(m_serialPort, &QSerialPort::readyRead, this, &SerialReader::handleReadyRead);
-    m_timer.start(5000);
+//    m_timer.start(5000);
 
 }
 
@@ -14,8 +14,8 @@ SerialReader::~SerialReader() {
 void SerialReader::handleReadyRead() {
     m_data.append(m_serialPort->readAll());
     // You should decode data here.
-    if (!m_timer.isActive())
-        m_timer.start(5000);
+//    if (!m_timer.isActive())
+//        m_timer.start(5000);
 }
 
 void SerialReader::handleTimeout() {
@@ -31,4 +31,13 @@ void SerialReader::handleError(QSerialPort::SerialPortError serialPortError) {
     if (serialPortError == QSerialPort::ReadError) {
         m_standardOutput << QObject::tr("An I/O error occurred while reading the data from port %1, error: %2").arg(m_serialPort->portName()).arg(m_serialPort->errorString()) << endl;
     }
+}
+
+void SerialReader::reset(QSerialPort *serialPort) {
+    m_timer.stop();
+    m_timer.setSingleShot(true);
+    disconnect(m_serialPort, SIGNAL(bytesWritten(qint64)), this, SLOT(handleBytesWritten(qint64)));
+    m_serialPort = serialPort;
+    connect(m_serialPort, SIGNAL(bytesWritten(qint64)), this, SLOT(handleBytesWritten(qint64)));
+
 }

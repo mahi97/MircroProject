@@ -20,15 +20,15 @@ ControlTab::ControlTab(QWidget *parent) : QWidget(parent) {
         main->addLayout(valvesLayouts[i]);
         main->addWidget(getVLine());
     }
-    valveLabels[0]->setText("Input"  );
-    valveLabels[1]->setText("Output" );
-    valveLabels[2]->setText("Diafrag");
+    valveLabels[0]->setText("Battery"  );
+    valveLabels[1]->setText("LCD" );
+    valveLabels[2]->setText("Debug");
 
     QVBoxLayout* scroll = new QVBoxLayout;
     QLabel* t[TIME_COUNT];
     QHBoxLayout* hb[TIME_COUNT];
     for (int i = 0; i < TIME_COUNT; i++) {
-        t[i] = new QLabel(QString("T_%1").arg(i));
+        t[i] = new QLabel(QString("Freq (khz.)"));
         scrollBars[i] = new QScrollBar(Qt::Horizontal);
         scrollBars[i]->setObjectName(QString("%1").arg(i));
         scrollBars[i]->setMaximum(1000);
@@ -45,18 +45,27 @@ ControlTab::ControlTab(QWidget *parent) : QWidget(parent) {
         hb[i]->addWidget(timeSpins[i]);
     }
 
+    auto sendlay = new QVBoxLayout;
+    sendBuffer = new QLineEdit();
+    morse = new QLabel("MORSE:\n");
+    sendlay->addWidget(sendBuffer);
+    sendlay->addWidget(morse);
+
+
     QHBoxLayout* btns = new QHBoxLayout;
-    def = new QPushButton("Default");
+    def = new QPushButton("Reset");
     send = new QPushButton("Send!");
     btns->addWidget(def);
     btns->addWidget(send);
 
-    QLabel* header = new QLabel("USART GUI V0.1", this);
+    QLabel* header = new QLabel("Micro Processor V0.2", this);
     all->addWidget(header, 0, Qt::AlignCenter);
     all->addWidget(getHLine());
     all->addLayout(main);
     all->addWidget(getHLine());
     all->addLayout(scroll);
+    all->addWidget(getHLine());
+    all->addLayout(sendlay);
     all->addWidget(getHLine());
     all->addLayout(btns);
     setLayout(all);
@@ -75,7 +84,7 @@ ControlTab::ControlTab(QWidget *parent) : QWidget(parent) {
 
     connect(def, SIGNAL(clicked(bool)), this, SLOT(defaultValue(bool)));
     connect(send, SIGNAL(clicked(bool)), this, SLOT(sendData(bool)));
-
+    connect(sendBuffer, SIGNAL(textChanged(QString)), this, SLOT(morseIt(QString)));
 }
 
 void ControlTab::toggleBtn(bool) {
@@ -120,9 +129,71 @@ void ControlTab::defaultValue(bool) {
         scrollBars[i]->setValue(0);
     }
 
+    sendBuffer->clear();
+    morse->setText("MORSE:\n");
+
 }
 
 void ControlTab::sendData(bool) {
-    encode(valvesValues, timeValues);
-    emit write(output);
+    QString btn;
+    btn.append(QString("%1X%2").arg(static_cast<unsigned char>(timeSpins[0]->value() >> 2)).arg(VALVE_COUNT));
+    for (int i = 0; i < VALVE_COUNT; i++) {
+        if (valves[i]->text() == QString("On")) btn.append("T");
+        else btn.append("F");
+    }
+    emit write((char*)(btn + sendBuffer->text()).toStdString().c_str());
+}
+
+QString ControlTab::morseCode(QChar b) {
+    switch (b.toLatin1()) {
+    case 'A': return ".-  ";
+    case 'B': return "-...  ";
+    case 'C': return "-.-.  ";
+    case 'D': return "-..  ";
+    case 'E': return ".  ";
+    case 'F': return "..-.  ";
+    case 'G': return "--.  ";
+    case 'H': return "....  ";
+    case 'I': return "..  ";
+    case 'J': return ".---  ";
+    case 'K': return "-.-  ";
+    case 'L': return ".-..  ";
+    case 'M': return "--  ";
+    case 'N': return "-.  ";
+    case 'O': return "---  ";
+    case 'P': return ".--.  ";
+    case 'Q': return "--.-  ";
+    case 'R': return ".-.  ";
+    case 'S': return "...  ";
+    case 'T': return "-  ";
+    case 'U': return "..-  ";
+    case 'V': return "...-  ";
+    case 'W': return ".--  ";
+    case 'X': return "-..-  ";
+    case 'Y': return "-.--  ";
+    case 'Z': return "--..  ";
+    case '0': return "-----  ";
+    case '1': return ".----  ";
+    case '2': return "..---  ";
+    case '3': return "...--  ";
+    case '4': return "....-  ";
+    case '5': return ".....  ";
+    case '6': return "-....  ";
+    case '7': return "--...  ";
+    case '8': return "---..  ";
+    case '9': return "----.  ";
+    case ' ': return "     ";
+    default:
+        break;
+    }
+    return "Something goes wrong :( ";
+}
+
+void ControlTab::morseIt(QString b) {
+    QString m = "MORSE\n";
+    for (int i = 0; i < b.size(); i++) {
+        m.append(morseCode(b[i].toUpper()));
+    }
+    morse->setText(m);
+    morse->setFont(QFont("mono"));
 }

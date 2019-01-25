@@ -9,6 +9,7 @@
 #include "configtab.h"
 #include "serialwriter.h"
 #include "serialreader.h"
+#include "replwidget.h"
 
 class MainWindow : public QMainWindow
 {
@@ -20,17 +21,17 @@ public:
 
 private slots:
     void write(char* data);
-    void slt_connect(int);
-    void slt_disconnect();
 private:
 
     ControlTab* control;
     InfoTab* info;
     ConfigTab* config;
+    ReplWidget* repl;
+
 
     QTabWidget* tabs;
 
-//    SerialWriter* writer;
+    SerialWriter* writer;
     SerialReader* reader;
 
 };

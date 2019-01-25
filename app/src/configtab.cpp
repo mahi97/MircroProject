@@ -80,42 +80,38 @@ ConfigTab::ConfigTab(QWidget *parent) : QWidget(parent) {
     connect(comboDataBits, SIGNAL(currentIndexChanged(int)), this, SLOT(updateData(int)));
 
     serial_open = false;
-    serialPort = nullptr;
+    serialPort = new QSerialPort(this);
     connectSerial();
 }
 
 ConfigTab::~ConfigTab() {
     closeSerial();
+    delete serialPort;
 }
 
 void ConfigTab::connectSerial() {
     closeSerial();
 
-    serialPort = new QSerialPort(this);
     serialPort->setBaudRate(comboBaud->currentData().toInt());
     serialPort->setPortName(comboPort->currentData().toString());
     serialPort->setParity(QSerialPort::Parity(comboParity->currentData().toInt()));
     serialPort->setStopBits(QSerialPort::StopBits(comboStop->currentData().toInt()));
     serialPort->setDataBits(QSerialPort::DataBits(comboDataBits->currentData().toInt()));
 
-    if (serialPort->open(QIODevice::WriteOnly)) {
+    if (serialPort->open(QIODevice::ReadWrite)) {
         serial_open = true;
         qInfo() << "Device is Connected";
     } else {
         serial_open = false;
         qWarning() << "Cannot Open Device";
     }
-    emit con(3);
+    emit con();
+    qApp->processEvents();
 }
 
 void ConfigTab::closeSerial() {
-//    emit disconnect();
-    if (serialPort == nullptr) {
-        return;
-    }
+
     serialPort->close();
-    delete serialPort;
-    serialPort = nullptr;
     serial_open = false;
     qInfo() << "Disconnected";
 }

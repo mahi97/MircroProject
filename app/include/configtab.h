@@ -15,6 +15,8 @@
 #include <QComboBox>
 #include <QSerialPort>
 #include <QDebug>
+#include <QApplication>
+
 #include "serialwriter.h"
 
 class ConfigTab : public QWidget
@@ -35,8 +37,6 @@ private:
     QComboBox* comboBaud;
     QComboBox* comboPort;
 
-//    SerialWriter* writer;
-
     QPushButton* check;
 
 private slots:
@@ -48,8 +48,7 @@ private slots:
     void updateData(int i);
 
 signals:
-    void con(int);
-    void disconnected();
+    void con();
 };
 
 #endif // CONFIGTAB_H

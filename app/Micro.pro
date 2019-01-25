@@ -20,7 +20,7 @@ SOURCES += src/main.cpp\
     src/serialwriter.cpp \
     src/serialreader.cpp \
     src/baseserial.cpp \
-    src/ReplWidget.cpp
+    src/replwidget.cpp
 
 INCLUDEPATH +=include/
 
@@ -31,7 +31,7 @@ HEADERS  += include/mainwindow.h \
     include/serialwriter.h \
     include/serialreader.h \
     include/baseserial.h \
-    include/ReplWidget.h
+    include/replwidget.h
 
 OBJECTS_DIR += objs/
 MOC_DIR += objs/

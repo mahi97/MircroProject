@@ -42,3 +42,12 @@ void SerialWriter::write(const QByteArray &writeData)
     m_timer.start(5000);
 
 }
+
+void SerialWriter::reset(QSerialPort *serialPort) {
+    m_timer.stop();
+    m_timer.setSingleShot(true);
+    disconnect(m_serialPort, SIGNAL(bytesWritten(qint64)), this, SLOT(handleBytesWritten(qint64)));
+    m_serialPort = serialPort;
+    connect(m_serialPort, SIGNAL(bytesWritten(qint64)), this, SLOT(handleBytesWritten(qint64)));
+
+}

@@ -1,4 +1,4 @@
-#include "ReplWidget.h"
+#include "replwidget.h"
 #include <iostream>
 
 ReplWidget::ReplWidget(QWidget *parent) : QPlainTextEdit(parent),

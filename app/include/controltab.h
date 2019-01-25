@@ -10,6 +10,7 @@
 #include <QDebug>
 #include <QSpinBox>
 #include <QTabWidget>
+#include <QLineEdit>
 
 
 class ControlTab : public QWidget
@@ -20,7 +21,7 @@ public:
     ControlTab(QWidget *parent);
 
     static const int VALVE_COUNT = 3;
-    static const int TIME_COUNT = 4;
+    static const int TIME_COUNT = 1;
 
 private:
 
@@ -37,6 +38,9 @@ private:
     QPushButton* def ;
     QPushButton* send;
 
+    QLineEdit* sendBuffer;
+    QLabel* morse;
+
     QFrame* getVLine() {
         QFrame *f = new QFrame(); f->setFrameShape(QFrame::VLine); f->setFrameShadow(QFrame::Sunken);
         return f;
@@ -49,9 +53,11 @@ private:
     char output[VALVE_COUNT + TIME_COUNT + 1];
 
     void encode(bool* _valves, int* _times);
+    QString morseCode(QChar b);
 private slots:
     void defaultValue(bool b);
     void sendData(bool b);
+    void morseIt(QString b);
 
     void toggleBtn(bool);
     void changeValueScroll(int value);

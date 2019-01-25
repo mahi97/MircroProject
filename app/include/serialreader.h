@@ -11,6 +11,7 @@ public:
     SerialReader(QSerialPort *serialPort, QObject *parent = 0);
     virtual ~SerialReader();
 
+    void reset(QSerialPort *serialPort);
 private slots:
     void handleReadyRead();
     virtual void handleTimeout();
