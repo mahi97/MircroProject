@@ -135,13 +135,24 @@ void ControlTab::defaultValue(bool) {
 }
 
 void ControlTab::sendData(bool) {
-    QString btn;
-    btn.append(QString("%1X%2").arg(static_cast<unsigned char>(timeSpins[0]->value() >> 2)).arg(VALVE_COUNT));
+    QString btn = "X   ";
+    QByteArray msg;
+
+    msg.append(0x99);
+    msg.append(static_cast<unsigned char>(timeSpins[0]->value() >> 2));
+    msg.append(static_cast<unsigned char>(VALVE_COUNT));
     for (int i = 0; i < VALVE_COUNT; i++) {
-        if (valves[i]->text() == QString("On")) btn.append("T");
-        else btn.append("F");
+        if (valves[i]->text() == QString("On")) {
+            msg.append("T");
+            btn.append("T");
+        }
+        else {
+            msg.append("F");
+            btn.append("F");
+        }
     }
-    emit write((char*)(btn + sendBuffer->text()).toStdString().c_str());
+    msg.append(sendBuffer->text());
+    emit write(msg.data());
 }
 
 QString ControlTab::morseCode(QChar b) {

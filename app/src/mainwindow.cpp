@@ -26,7 +26,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     reader = new SerialReader(config->serialPort, this);
 
     connect(control, SIGNAL(write(char*)), this, SLOT(write(char*)));
-
+    connect(repl, SIGNAL(command(QString)), this, SLOT(parse(QString)));
+    connect(this, SIGNAL(ready(QString)), repl, SLOT(result(QString)));
+    connect(reader, SIGNAL(ready(QString)), repl, SLOT(append(QString)));
 }
 
 
@@ -39,4 +41,8 @@ void MainWindow::write(char *data) {
     if (config->serialPort->isOpen()) {
         writer->write(QByteArray(data, 8));
     }
+}
+
+void MainWindow::parse(QString data) {
+    emit ready(QString("Mode Changed to %1").arg(data));
 }

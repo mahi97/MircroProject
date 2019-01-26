@@ -2,6 +2,7 @@
 #define SERIALREADER_H
 
 #include "baseserial.h"
+#include <QApplication>
 
 class SerialReader : public BaseSerial
 {
@@ -12,6 +13,8 @@ public:
     virtual ~SerialReader();
 
     void reset(QSerialPort *serialPort);
+signals:
+    void ready(QString);
 private slots:
     void handleReadyRead();
     virtual void handleTimeout();

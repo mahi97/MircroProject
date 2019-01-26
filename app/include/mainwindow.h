@@ -21,6 +21,9 @@ public:
 
 private slots:
     void write(char* data);
+    void parse(QString data);
+signals:
+    void ready(QString);
 private:
 
     ControlTab* control;
