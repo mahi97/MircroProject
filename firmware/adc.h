@@ -5,12 +5,33 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-ISR(ADC_vect)
-{ 
-	ADCSRA |= 1<<ADSC; // Start Conversion
-	while(ADCSRA & (1<<ADSC));
-	uint16_t i = ADC;
-	switch(i >> 7) { // [0~1023] -> [0~8]
+void adc_init()
+{
+    // AREF = AVcc
+    ADMUX = (1<<REFS0);
+ 
+    // ADC Enable and prescaler of 128
+    // 16000000/128 = 125000
+    ADCSRA = (1<<ADEN)|(1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0);
+}
+
+void adc_read(uint8_t ch)
+{
+  // select the corresponding channel 0~7
+  // ANDing with ’7′ will always keep the value
+  // of ‘ch’ between 0 and 7
+  ch &= 0b00000111;  // AND operation with 7
+  ADMUX = (ADMUX & 0xF8)|ch; // clears the bottom 3 bits before ORing
+ 
+  // start single convertion
+  // write ’1′ to ADSC
+  ADCSRA |= (1<<ADSC);
+ 
+  // wait for conversion to complete
+  // ADSC becomes ’0′ again
+  // till then, run loop continuously
+  while(ADCSRA & (1<<ADSC));
+	switch(((ADC - 600) >> 5) % 8) { // [0~1023] -> [0~8]
 		case 0:
 			PORTC = 0x07; // 0000 0111
 		break;
@@ -35,22 +56,7 @@ ISR(ADC_vect)
 		case 7:
 			PORTC = 0xFF; // 1111 1111
 		break;
-		default:
-			PORTC = 0x03;
-		break;
 	}
-
-}
-
-void adc_init() {
-	ADCSRA = (1 << ADEN)  // Enable the ADC
-		   | (1 << ADIE)  //interrupt feature
-		   | (1 << ADATE) // Enable auto trigger
-		   | (1 << ADPS0) | (1 << ADPS1) | (1 << ADPS2); // set the ACD clock pre-scalar to clk/128
-	ADMUX = (1 << REFS0) | (1 << REFS1) // Select internal 2.56V as Vref,
-	      | (1 << ADLAR);   // left justify data registers
-	      //select ADC0 as input channel
-	SFIOR &= (0x0F); // Free Running and Not High Speed Mode
 }
 
 #endif __ADC_HEADER__

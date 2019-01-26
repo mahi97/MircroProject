@@ -4,5 +4,5 @@ all:
 	~/avr/bin/avr-objcopy -R .eeprom -O ihex main.obj main.hex
 
 install:
-	avrdude -c stk500 -p m16 -U flash:w:main.hex:i -P /dev/tty.usbserial
-	#avrdude -c usbasp -p m16 -U flash:w:main.hex:i
+	#avrdude -c stk500 -p m16 -U flash:w:main.hex:i -P /dev/tty.usbserial
+	avrdude -c usbasp -p m16 -U flash:w:main.hex:i

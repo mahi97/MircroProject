@@ -152,6 +152,7 @@ void ControlTab::sendData(bool) {
         }
     }
     msg.append(sendBuffer->text());
+    msg.append(0x88);
     emit write(msg.data());
 }
 

@@ -10,7 +10,7 @@
 #define LCD_Dir DDRB					/* Define LCD data port direction */
 #define LCD_Port PORTB					/* Define LCD data port */
 #define RS PB0							/* Define Register Select (data reg./command reg.) signal pin */
-#define EN PB2 							/* Define Enable signal pin */
+#define EN PB2  						/* Define Enable signal pin */
  
 
 void LCD_Command( unsigned char cmnd )
@@ -82,7 +82,7 @@ void LCD_String_xy(char row, char pos, char *str)	/* Send string to LCD with xy 
 	LCD_String(str);					/* Call LCD string function */
 }
 
-void LCD_Clear()
+void lcd_clear()
 {
 	LCD_Command (0x01);					/* Clear display */
 	_delay_ms(2);
