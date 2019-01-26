@@ -20,8 +20,8 @@ void init() {
 	DDRB = 0xFF; // LCD
 	PORTB = 0x00;
 
-	DDRC = 0xFF; // LEDs
-	PORTC = 0x00;
+	DDRC = 0xFC; // LEDs and Keys
+	PORTC = 0x03;
 
 	DDRD = (1<<PD1)  // TXD Usart Output
 	     | (1<<PD7); // OC2 TIMER OUTPUT

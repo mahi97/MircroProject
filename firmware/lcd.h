@@ -9,8 +9,8 @@
 
 #define LCD_Dir DDRB					/* Define LCD data port direction */
 #define LCD_Port PORTB					/* Define LCD data port */
-#define RS PB1							/* Define Register Select (data reg./command reg.) signal pin */
-#define EN PB3 							/* Define Enable signal pin */
+#define RS PB0							/* Define Register Select (data reg./command reg.) signal pin */
+#define EN PB2 							/* Define Enable signal pin */
  
 
 void LCD_Command( unsigned char cmnd )
